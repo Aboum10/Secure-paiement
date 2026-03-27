@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Dashboard Admin</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+body{font-family:Arial;background:#f4f4f4;padding:20px}
+h1{text-align:center}
+.card{background:white;padding:20px;margin:20px;border-radius:10px;box-shadow:0 5px 10px rgba(0,0,0,0.2);}
+</style>
+</head>
+<body>
+
+<h1>Dashboard Admin - Transactions</h1>
+
+<div class="card">
+<canvas id="transactionsChart" width="400" height="200"></canvas>
+</div>
+
+<script>
+const data = {{ stats|safe }}; // liste de montants
+const labels = data.map((_,i)=>`Transaction ${i+1}`);
+
+const ctx = document.getElementById('transactionsChart').getContext('2d');
+new Chart(ctx,{
+    type:'bar',
+    data:{
+        labels: labels,
+        datasets:[{
+            label:'Montant ($)',
+            data:data,
+            backgroundColor:'rgba(54,162,235,0.6)'
+        }]
+    },
+    options:{responsive:true}
+});
+</script>
+
+</body>
+</html>
