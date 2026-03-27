@@ -84,6 +84,18 @@ def payment():
     else:
         return render_template("payment.html")
 
+@app.route("/admin")
+def admin():
+    conn = sqlite3.connect("database.db")
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT * FROM transactions")
+    transactions = cursor.fetchall()
+
+    conn.close()
+
+    return render_template("admin.html", transactions=transactions)
+    
 @app.route("/otp", methods=["GET","POST"])
 def otp():
     if request.method=="POST":
