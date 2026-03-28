@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 import random
-import smtplib
+import random
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"  # pour sessions OTP
@@ -37,16 +37,12 @@ def init_db():
 init_db()
 
 # -------------------------------------------
-# SMTP OTP
-def send_otp(email):
-    otp = random.randint(100000,999999)
-    server = smtplib.SMTP("smtp.gmail.com",587)
-    server.starttls()
-    server.login("abakarabagana15@gmail.com","Aa60459147")  # <== à changer
-    message = f"Subject: Votre OTP\n\nVotre code OTP est : {otp}"
-    server.sendmail("tonemail@gmail.com",email,message)
-    server.quit()
-    return str(otp)
+def generate_otp():
+    otp = str(random.randint(100000,999999))
+    print("=================================")
+    print(" OTP DU CLIENT :", otp)
+    print("=================================")
+    return otp
 
 # -------------------------------------------
 # Routes
@@ -60,29 +56,15 @@ def shop():
 
 @app.route("/payment", methods=["GET","POST"])
 def payment():
-    if request.method=="POST":
-        name = request.form["name"]
-        card = request.form["card"]
-        exp = request.form["exp"]
-        cvv = request.form["cvv"]
-        amount = request.form["amount"]
 
-        # enregistrer transaction avec status "PENDING"
-        conn = sqlite3.connect("database.db")
-        cursor = conn.cursor()
-        cursor.execute("""
-            INSERT INTO transactions(name, card, exp, cvv, amount, status)
-            VALUES (?,?,?,?,?,?)
-        """,(name,card,exp,cvv,amount,"PENDING"))
-        conn.commit()
-        conn.close()
+    if request.method == "POST":
 
-        # générer OTP
-        session["otp"] = send_otp("client@gmail.com")  # <== email du client
-        session["transaction_id"] = cursor.lastrowid
+        otp = generate_otp()
+        session["otp"] = otp
+
         return redirect("/otp")
-    else:
-        return render_template("payment.html")
+
+    return render_template("payment.html")
 
 @app.route("/admin")
 def admin():
@@ -98,21 +80,18 @@ def admin():
     
 @app.route("/otp", methods=["GET","POST"])
 def otp():
-    if request.method=="POST":
+
+    if request.method == "POST":
+
         user_otp = request.form["otp"]
+
         if user_otp == session.get("otp"):
-            # mettre transaction à SUCCESS
-            conn = sqlite3.connect("database.db")
-            cursor = conn.cursor()
-            cursor.execute("UPDATE transactions SET status=? WHERE id=?",
-                           ("SUCCESS",session.get("transaction_id")))
-            conn.commit()
-            conn.close()
             return redirect("/success")
+
         else:
             return "OTP incorrect"
-    else:
-        return render_template("otp.html")
+
+    return render_template("otp.html")
 
 @app.route("/success")
 def success():
