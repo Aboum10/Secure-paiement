@@ -99,13 +99,26 @@ def success():
 
 @app.route("/dashboard")
 def dashboard():
-    # récupérer toutes les transactions
+
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT amount FROM transactions")
-    data = [row[0] for row in cursor.fetchall()]
+
+    cursor.execute("SELECT * FROM transactions")
+    transactions = cursor.fetchall()
+
+    cursor.execute("SELECT COUNT(*) FROM transactions")
+    total = cursor.fetchone()[0]
+
+    cursor.execute("SELECT SUM(amount) FROM transactions")
+    revenue = cursor.fetchone()[0]
+
     conn.close()
-    return render_template("dashboard.html", stats=data)
+
+    return render_template("dashboard.html",
+                           transactions=transactions,
+                           total=total,
+                           revenue=revenue,
+                           clients=total)
 
 # -------------------------------------------
 # Lancement du serveur HTTPS local
