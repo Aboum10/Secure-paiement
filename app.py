@@ -9,7 +9,7 @@ app.secret_key = "supersecretkey"  # pour sessions OTP
 # -------------------------------------------
 # Produits du shop
 products = [
-    {"name":"Smart Watch","price":120,"image":"https://images.unsplash.com/photo-1516574187841-cb9cc2ca948b"},
+    {"name":"Smart Watch","price":120,"image":"watch.jpg"},
     {"name":"Laptop","price":700,"image":"https://images.unsplash.com/photo-1517336714731-489689fd1ca8"},
     {"name":"Desktop Computer","price":900,"image":"https://images.unsplash.com/photo-1587202372775-e229f172b9d7"},
     {"name":"Smartphone","price":400,"image":"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9"},
