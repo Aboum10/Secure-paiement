@@ -141,6 +141,11 @@ def admin():
 
 @app.route("/dashboard")
 def dashboard():
+
+    # sécurité
+    if not session.get("admin"):
+        return redirect("/login")
+
     conn = sqlite3.connect("database.db")
     cursor = conn.cursor()
 
@@ -162,6 +167,29 @@ def dashboard():
         revenue=revenue if revenue else 0,
         clients=total
     )
+
+# -------------------------------------------
+# LOGIN ADMIN
+@app.route("/login", methods=["GET", "POST"])
+def login():
+
+    if request.method == "POST":
+        username = request.form["username"]
+        password = request.form["password"]
+
+        # identifiants admin (à modifier si tu veux)
+        if username == "admin" and password == "admin123":
+            session["admin"] = True
+            return redirect("/dashboard")
+        else:
+            return "Accès refusé"
+
+    return render_template("login.html")
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/login")
 
 
 # -------------------------------------------
