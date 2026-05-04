@@ -95,7 +95,7 @@ def otp():
 
 @app.route("/success")
 def success():
-    return "Paiement réussi !"
+   return render_template("success.html")
 
 @app.route("/dashboard")
 def dashboard():
