@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request, redirect, session
 import sqlite3
 import random
+import smtplib
+from email.mime.text import MIMEText
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -46,6 +48,28 @@ def generate_otp():
     print("=================================")
     return otp
 
+# -------------------------------------------
+# EMAIL OTP
+def send_otp_email(email, otp):
+    try:
+        msg = MIMEText(f"Votre code OTP est : {otp}")
+        msg["Subject"] = "Code OTP Paiement"
+        msg["From"] = "abakarabagana15@gmail.com"
+        msg["To"] = email
+
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+
+        # ⚠️ IMPORTANT : MET TON MOT DE PASSE D’APPLICATION ICI
+        server.login("abakarabagana15@gmail.com", "hywt dntt vzga fytc")
+
+        server.send_message(msg)
+        server.quit()
+
+        print("OTP envoyé par email ✔️")
+
+    except Exception as e:
+        print("Erreur envoi email :", e)
 
 # -------------------------------------------
 # Routes
@@ -87,15 +111,20 @@ def payment():
         session["card"] = request.form["card"]
         session["exp"] = request.form["exp"]
         session["cvv"] = request.form["cvv"]
+        session["email"] = request.form["email"]
 
         otp = generate_otp()
         session["otp"] = otp
+
+        # ENVOI EMAIL OTP
+        send_otp_email(session["email"], otp)
 
         return redirect("/otp")
 
     return render_template("payment.html",
                            product=product,
                            amount=amount)
+
 
 @app.route("/otp", methods=["GET", "POST"])
 def otp():
@@ -161,7 +190,6 @@ def admin():
 @app.route("/dashboard")
 def dashboard():
 
-    # sécurité
     if not session.get("admin"):
         return redirect("/login")
 
@@ -196,7 +224,6 @@ def login():
         username = request.form["username"]
         password = request.form["password"]
 
-        # identifiants admin (à modifier si tu veux)
         if username == "admin" and password == "admin123":
             session["admin"] = True
             return redirect("/dashboard")
@@ -205,11 +232,11 @@ def login():
 
     return render_template("login.html")
 
+
 @app.route("/logout")
 def logout():
     session.clear()
     return redirect("/login")
-
 
 # -------------------------------------------
 if __name__ == "__main__":
