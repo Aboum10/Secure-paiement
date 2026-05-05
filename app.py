@@ -59,24 +59,43 @@ def shop():
     return render_template("shop.html", products=products)
 
 
-@app.route("/payment", methods=["GET", "POST"])
+@app.route("/payment", methods=["GET","POST"])
 def payment():
 
+    # mapping sécurisé
+    product_prices = {
+        "Smart Watch": 120,
+        "Laptop": 700,
+        "Desktop Computer": 900,
+        "Smartphone": 400
+    }
+
+    product = request.args.get("product")
+
+    if product not in product_prices:
+        return "Produit invalide"
+
+    amount = product_prices[product]
+
+    # stocker côté serveur
+    session["amount"] = amount
+    session["product"] = product
+
     if request.method == "POST":
-        # sauvegarder infos formulaire temporairement
+
         session["name"] = request.form["name"]
         session["card"] = request.form["card"]
         session["exp"] = request.form["exp"]
         session["cvv"] = request.form["cvv"]
-        session["amount"] = request.form["amount"]
 
         otp = generate_otp()
         session["otp"] = otp
 
         return redirect("/otp")
 
-    return render_template("payment.html")
-
+    return render_template("payment.html",
+                           product=product,
+                           amount=amount)
 
 @app.route("/otp", methods=["GET", "POST"])
 def otp():
