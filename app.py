@@ -96,8 +96,7 @@ def payment():
 
     product = request.args.get("product")
 
-    if product not in product_prices:
-        return "Produit invalide"
+
 
     amount = product_prices[product]
 
