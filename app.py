@@ -3,6 +3,7 @@ import sqlite3
 import random
 import smtplib
 from email.mime.text import MIMEText
+import os 
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -50,10 +51,10 @@ def generate_otp(email):
     print("OTP DU CLIENT :", otp)
     print("=================================")
 
-    sender = "abakarabagana15@gmail.com"
+    sender = os.getenv("EMAIL_USER")
 
     # MOT DE PASSE D’APPLICATION GOOGLE
-    password = "hiedosryjlteldjz"
+    password = os.getenv("EMAIL_PASS")
 
     msg = MIMEText(f"Votre code OTP est : {otp}")
     msg["Subject"] = "Code OTP SecureShop"
