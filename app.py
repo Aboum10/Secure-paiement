@@ -40,6 +40,7 @@ def init_db():
 init_db()
 
 # -------------------------------------------
+
 # OTP
 def generate_otp(email):
 
@@ -75,29 +76,6 @@ def generate_otp(email):
         print("ERREUR EMAIL :", e)
 
     return otp
-
-# -------------------------------------------
-# EMAIL OTP
-def send_otp_email(email, otp):
-    try:
-        msg = MIMEText(f"Votre code OTP est : {otp}")
-        msg["Subject"] = "Code OTP Paiement"
-        msg["From"] = "abakarabagana15@gmail.com"
-        msg["To"] = email
-
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-
-        # ⚠️ IMPORTANT : MET TON MOT DE PASSE D’APPLICATION ICI
-        server.login("abakarabagana15@gmail.com", "hiedosryjlteldjz")
-
-        server.send_message(msg)
-        server.quit()
-
-        print("OTP envoyé par email ✔️")
-
-    except Exception as e:
-        print("Erreur envoi email :", e)
 
 # -------------------------------------------
 # Routes
@@ -264,9 +242,8 @@ def logout():
 
 # -------------------------------------------
 if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=5000,
-        ssl_context=("cert.pem", "key.pem"),
-        debug=True
-    )
+   app.run(
+    host="0.0.0.0",
+    port=5000,
+    debug=True
+)
