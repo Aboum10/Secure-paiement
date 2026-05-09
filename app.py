@@ -41,11 +41,39 @@ init_db()
 
 # -------------------------------------------
 # OTP
-def generate_otp():
+def generate_otp(email):
+
     otp = str(random.randint(100000, 999999))
+
     print("=================================")
     print("OTP DU CLIENT :", otp)
     print("=================================")
+
+    sender = "abakarabagana15@gmail.com"
+
+    # MOT DE PASSE D’APPLICATION GOOGLE
+    password = "hywt dntt vzga fytc"
+
+    msg = MIMEText(f"Votre code OTP est : {otp}")
+    msg["Subject"] = "Code OTP SecureShop"
+    msg["From"] = sender
+    msg["To"] = email
+
+    try:
+        server = smtplib.SMTP("smtp.gmail.com", 587)
+        server.starttls()
+
+        server.login(sender, password)
+
+        server.sendmail(sender, email, msg.as_string())
+
+        server.quit()
+
+        print("EMAIL OTP ENVOYÉ")
+
+    except Exception as e:
+        print("ERREUR EMAIL :", e)
+
     return otp
 
 # -------------------------------------------
@@ -111,6 +139,7 @@ def payment():
     if request.method == "POST":
 
         session["name"] = request.form["name"]
+        session["email"] = request.form["email"]
         session["card"] = request.form["card"]
         session["exp"] = request.form["exp"]
         session["cvv"] = request.form["cvv"]
