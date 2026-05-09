@@ -52,7 +52,7 @@ def generate_otp(email):
     sender = "abakarabagana15@gmail.com"
 
     # MOT DE PASSE D’APPLICATION GOOGLE
-    password = "hywt dntt vzga fytc"
+    password = "hywtdnttvzgafytc"
 
     msg = MIMEText(f"Votre code OTP est : {otp}")
     msg["Subject"] = "Code OTP SecureShop"
@@ -89,7 +89,7 @@ def send_otp_email(email, otp):
         server.starttls()
 
         # ⚠️ IMPORTANT : MET TON MOT DE PASSE D’APPLICATION ICI
-        server.login("abakarabagana15@gmail.com", "hywt dntt vzga fytc")
+        server.login("abakarabagana15@gmail.com", "hywtdnttvzgafytc")
 
         server.send_message(msg)
         server.quit()
