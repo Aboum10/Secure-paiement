@@ -123,17 +123,19 @@ def payment():
         "Smartphone": 400
     }
 
-    # -----------------------------------
-    # GET = choix produit
+    # =========================
+    # GET
+    # =========================
     if request.method == "GET":
 
         product = request.args.get("product")
 
+        # empêcher crash
         if not product:
             return redirect("/shop")
 
         if product not in product_prices:
-            return "Produit invalide"
+            return redirect("/shop")
 
         session["product"] = product
         session["amount"] = product_prices[product]
@@ -144,22 +146,22 @@ def payment():
             amount=product_prices[product]
         )
 
-    # -----------------------------------
-    # POST = formulaire paiement
+    # =========================
+    # POST
+    # =========================
     if request.method == "POST":
 
-        session["name"] = request.form["name"]
-        session["email"] = request.form["email"]
-        session["card"] = request.form["card"]
-        session["exp"] = request.form["exp"]
-        session["cvv"] = request.form["cvv"]
+        session["name"] = request.form.get("name")
+        session["email"] = request.form.get("email")
+        session["card"] = request.form.get("card")
+        session["exp"] = request.form.get("exp")
+        session["cvv"] = request.form.get("cvv")
 
         otp = generate_otp(session["email"])
 
         session["otp"] = otp
 
         return redirect("/otp")
-
 # -------------------------------------------
 @app.route("/otp", methods=["GET", "POST"])
 def otp():
