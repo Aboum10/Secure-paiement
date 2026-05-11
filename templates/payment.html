@@ -1,15 +1,16 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr">
 
 <head>
+<meta charset="UTF-8">
 <title>Paiement sécurisé</title>
 
 <style>
 
 body{
+margin:0;
 font-family:Arial;
-background:#2c3e50;
-color:white;
+background:linear-gradient(135deg,#141e30,#243b55);
 display:flex;
 justify-content:center;
 align-items:center;
@@ -18,24 +19,58 @@ height:100vh;
 
 form{
 background:white;
-color:black;
 padding:40px;
-border-radius:10px;
-width:350px;
+border-radius:15px;
+width:380px;
+box-shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+
+h2{
+text-align:center;
+margin-bottom:20px;
+color:#2c3e50;
+}
+
+label{
+font-weight:bold;
+color:#2c3e50;
 }
 
 input{
 width:100%;
-padding:10px;
-margin:10px 0;
+padding:12px;
+margin-top:5px;
+margin-bottom:15px;
+border:1px solid #ccc;
+border-radius:5px;
+font-size:15px;
+box-sizing:border-box;
 }
 
 button{
 background:#27ae60;
 color:white;
 border:none;
-padding:10px;
+padding:12px;
 width:100%;
+font-size:16px;
+border-radius:5px;
+cursor:pointer;
+transition:0.3s;
+}
+
+button:hover{
+background:#219150;
+}
+
+.product{
+background:#ecf0f1;
+padding:10px;
+border-radius:5px;
+margin-bottom:15px;
+text-align:center;
+font-weight:bold;
+color:#2c3e50;
 }
 
 </style>
@@ -48,27 +83,32 @@ width:100%;
 
 <h2>Paiement sécurisé</h2>
 
-<input name="name" placeholder="Nom">
+<div class="product">
+Produit : {{ product }} <br>
+Montant : ${{ amount }}
+</div>
 
-<input name="card" placeholder="Numéro de carte">
+<label>Nom complet</label>
+<input type="text" name="name" placeholder="Votre nom" required>
 
-<input name="exp" placeholder="Date expiration">
-
-<input name="cvv" placeholder="CVV">
-
-<input type="text" value="{{ amount }}" readonly>
-
+<label>Email</label>
 <input type="email" name="email" placeholder="Votre email" required>
 
-<button>Payer</button>
+<label>Numéro de carte</label>
+<input type="text" name="card" placeholder="1234 5678 9012 3456" required>
+
+<label>Date expiration</label>
+<input type="text" name="exp" placeholder="MM/AA" required>
+
+<label>CVV</label>
+<input type="password" name="cvv" placeholder="123" required>
+
+<label>Montant</label>
+<input type="text" name="amount" value="{{ amount }}" readonly>
+
+<button type="submit">Payer maintenant</button>
 
 </form>
-
-<script>
-
-document.getElementById("amount").value = localStorage.getItem("amount")
-
-</script>
 
 </body>
 
