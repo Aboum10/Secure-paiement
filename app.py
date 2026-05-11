@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 import os
 
 app = Flask(__name__)
-app.secret_key = "supersecretkey"
+app.secret_key = "supersecretkey" 
 
 # -------------------------------------------
 # Produits du shop
