@@ -205,12 +205,12 @@ def generate_otp(email):
     print("OTP :", otp)
     print("================================")
 
-    sender = os.getenv("EMAIL_USER")
+    sender = "abakarabagana15@gmail.com"
 
-    password = os.getenv("EMAIL_PASS")
+    password = "qttoqdkmdliocidl"
 
     if not sender or not password:
-        print("EMAIL_USER ou EMAIL_PASS manquant")
+        print("EMAIL_USER_OU_EMAIL_PASS")
         return otp
 
     try:
@@ -467,7 +467,7 @@ def login():
 
         password = request.form["password"]
 
-        if username == "admin" and password == "admin123":
+        if username == "aboum235@" and password == "Aa459147":
 
             session["admin"] = True
 
