@@ -169,18 +169,20 @@ def generate_otp(email):
     sender = os.getenv("EMAIL_USER")
     password = os.getenv("EMAIL_PASS")
 
-    # Vérification Render
+    # sécurité
     if not sender or not password:
-        print("VARIABLES EMAIL MANQUANTES")
+        print("Variables EMAIL manquantes")
         return otp
 
-    msg = MIMEText(f"Votre code OTP est : {otp}")
-    msg["Subject"] = "Code OTP SecureShop"
-    msg["From"] = sender
-    msg["To"] = email
-
     try:
-        server = smtplib.SMTP("smtp.gmail.com", 587)
+        msg = MIMEText(f"Votre code OTP est : {otp}")
+        msg["Subject"] = "Code OTP SecureShop"
+        msg["From"] = sender
+        msg["To"] = email
+
+        # timeout ajouté
+        server = smtplib.SMTP("smtp.gmail.com", 587, timeout=10)
+
         server.starttls()
 
         server.login(sender, password)
